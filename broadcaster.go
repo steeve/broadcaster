@@ -63,14 +63,14 @@ func (b *Broadcaster) Signal() {
 }
 
 // Listen creates a receiver that can read written values.
-func (b *Broadcaster) Listen() (<-chan interface{}, chan<- interface{}) {
+func (b *Broadcaster) Listen() (<-chan interface{}, chan<- struct{}) {
 	b.mx.Lock()
 	defer b.mx.Unlock()
 
 	r := receiver{sync.Mutex{}, b.c}
 
 	vc := make(chan interface{})
-	cc := make(chan interface{})
+	cc := make(chan struct{})
 
 	go func() {
 		r.mx.Lock()
